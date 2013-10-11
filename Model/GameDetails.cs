@@ -39,10 +39,18 @@ namespace OpenTTDSaveSync.Model
 
             if (Directory.Exists(path))
             {
+                _saveStorageProvider.GetLatestSaveFile(TTDEXENAME, path);
                 FileSystemWatcher directory = new FileSystemWatcher();
                 directory.Path = path;
+                directory.IncludeSubdirectories = true;
+
+                // Register for events
+                directory.Created += new FileSystemEventHandler(directory_Changed);
+
+                // Start Watching
+                directory.EnableRaisingEvents = true;
+
                 _saveLocationCollection.Add(directory);
-                directory.Changed += directory_Changed;
 
                 result = true;
             }
@@ -56,6 +64,12 @@ namespace OpenTTDSaveSync.Model
         public void LaunchGame()
         {
             Process.Start(Path.Combine(_gamePath, TTDEXENAME));
+        }
+
+        public void CheckForNewSave()
+        {
+            foreach (var path in _saveLocationCollection)
+                _saveStorageProvider.GetLatestSaveFile(TTDEXENAME, path.Path);
         }
     }
 }

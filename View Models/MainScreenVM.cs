@@ -17,11 +17,13 @@ namespace OpenTTDSaveSync
         private DelegateCommand _addSaveDirectoryCommand;
         private DelegateCommand _addGamePathCommand;
         private DelegateCommand _applyLoginDetailsCommand;
+        private DelegateCommand _getLatestSaveCommand;
 
         public DelegateCommand LaunchTTDCommand { get { return _launchTTDCommand; } }
         public DelegateCommand AddSaveDirectoryCommand { get { return _addSaveDirectoryCommand; } }
         public DelegateCommand AddGamePathCommand { get { return _addGamePathCommand; } }
         public DelegateCommand ApplyLoginDetailsCommand { get { return _applyLoginDetailsCommand; } }
+        public DelegateCommand GetLatestSaveCommand { get { return _getLatestSaveCommand; } }
 
         private GameDetails openTTD;
         private ISaveStorageProvider storageProvider;
@@ -51,6 +53,17 @@ namespace OpenTTDSaveSync
                 CanExecuteDelegate = x => true,
                 ExecuteDelegate = x => SetLoginDetails()
             };
+
+            _getLatestSaveCommand = new DelegateCommand
+            {
+                CanExecuteDelegate = x => storageProvider != null && openTTD != null,
+                ExecuteDelegate = x => GetLatestSave()
+            };
+        }
+
+        private void GetLatestSave()
+        {
+            openTTD.CheckForNewSave();   
         }
 
         private void AddGameLocation()
@@ -69,7 +82,8 @@ namespace OpenTTDSaveSync
         {
             storageProvider = new DropBoxAPI();
 
-            storageProvider.Authenticate();
+            if (!storageProvider.Authenticate())
+                storageProvider = null;
         }
 
         private void AddSavePath()

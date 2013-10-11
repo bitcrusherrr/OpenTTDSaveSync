@@ -24,7 +24,7 @@ namespace OpenTTDSaveSync.Model
             throw new NotImplementedException("Nope");
         }
 
-        public string GetLatestSaveFile(string gameExeName)
+        public string GetLatestSaveFile(string gameExeName, string savePath)
         {
             throw new NotImplementedException("Nope");
         }

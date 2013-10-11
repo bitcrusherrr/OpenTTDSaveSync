@@ -13,9 +13,7 @@ namespace OpenTTDSaveSync.Model
 
         void UploadNewSaveFile(string gameExeName, string filePath);
 
-        void UploadNewSaveFiles(string gameExeName, string[] filePath);
-
-        string GetLatestSaveFile(string gameExeName);
+        string GetLatestSaveFile(string gameExeName, string savePath);
 
         string[] GetAllSaveFiles(string gameExeName);
     }
