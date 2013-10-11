@@ -20,9 +20,12 @@ namespace OpenTTDSaveSync
     /// </summary>
     public partial class MainWindow : Window
     {
+        private  MainScreenVM vm;
         public MainWindow()
         {
+            vm = new MainScreenVM();
             InitializeComponent();
+            DataContext = vm;
         }
     }
 }
